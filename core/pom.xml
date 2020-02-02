@@ -22,7 +22,7 @@
         <asm.version>6.0</asm.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <commom-io.version>2.4</commom-io.version>
-        <jackson.version>2.9.3</jackson.version>
+        <jackson.version>2.10.2</jackson.version>
         <spring.version>4.3.13.RELEASE</spring.version>
         <rxjava.veersion>0.20.7</rxjava.veersion>
         <rxnetty.version>0.4.7</rxnetty.version>
