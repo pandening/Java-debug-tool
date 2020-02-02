@@ -15,7 +15,7 @@
         <asm.version>2.0</asm.version>
         <slf4j.version>1.7.21</slf4j.version>
         <jna.version>5.5.0</jna.version>
-        <netty.version>4.1.25.Final</netty.version>
+        <netty.version>4.1.42.Final</netty.version>
         <hessian.version>3.1.5</hessian.version>
         <jline.version>2.14.6</jline.version>
         <jopt.version>4.6</jopt.version>
