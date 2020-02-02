@@ -39,6 +39,26 @@ the default port is 11234.
 
 ### usage
 
+using 'list' command to show all of the commands, then use 'help' command to get the usage of the command;
+
+```bash
+
+  list
+  h -cmd list
+  h -cmd mt
+  h -cmd monitor
+  ...
+
+```
+
+![list command](https://p1.meituan.net/travelcube/70b00b644f4d9b5408df122b7c226631140733.png)
+
+![help command](https://p1.meituan.net/travelcube/d4a8eaeaa070396cf6f472e53b9685a9111432.png)
+
+![monitor command](https://p0.meituan.net/travelcube/74c50cdff72994f8ac6f02d922262528158297.png)
+
+![method trace command](https://p0.meituan.net/travelcube/e19e52ee5dc4aa941d9be79c8e2dc0aa262152.png)
+
 [usage](usage.md)
 
 ### develop
