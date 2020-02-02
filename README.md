@@ -40,3 +40,45 @@ the default port is 11234.
 ### usage
 
 [usage](usage.md)
+
+### develop
+
+#### the module / dir
+
+* agent
+
+the agent code, do attach work.
+
+
+* core
+
+the java-debug-tool's biz codes, including netty-handler, debug-client / debug-server, command handler, etc;
+
+
+* spring
+
+do not edit;
+
+* test
+
+the test module, test codes write here;
+
+* script
+
+the java-debug-tool's script dir;
+
+* bin
+
+the target bin dir;
+
+
+#### pack 
+
+```bash
+ 
+ cd script
+ ./javadebug-pack.sh
+
+```
+
+enjoy !
