@@ -34,3 +34,5 @@ rebel.xml
 *.log
 *.txt
 *.jar
+
+*/debug-dump-dir

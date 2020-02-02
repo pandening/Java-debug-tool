@@ -42,14 +42,14 @@ fc -class String -l 2
 
 这个命令非常简单，可以在处理一些类冲突等问题的时候使用，这个简单的命令还会和获取方法运行时视图的命令息息相关，这一点后续再谈，下面是一张运行该命令的展示图：
 
-![查找类命令](https://upload-images.jianshu.io/upload_images/7853175-581b0252f654b645.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![查找类命令](https://p0.meituan.net/travelcube/d585bf2e97bde7ac0b9b8a83f92d2053453935.png)
 
 ### 动态获取方法执行视图
 
 这是Java-debug-tool中最为复杂，也是最为有用的命令，这个命令的特点是使用起来非常简单，但是想要发挥它真正的威力，或者是排查一些复杂问题的场景下还是需要学习一下，下面就从最简单的用法开始，逐步深入的介绍这个命令的精华所在。
 在此之前，先简单描述一下该命令能输出一些什么样的调试信息，或者说，Java-debug-tool获取到的方法执行视图具体是什么样子的：
 
-![方法执行视图](https://upload-images.jianshu.io/upload_images/7853175-893fec158f29fd92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![方法执行视图](https://p0.meituan.net/travelcube/dfd819411878bc46eaf967952a452094109760.png)
 
 方法执行视图可以获取到的信息如下：
 
