@@ -52,12 +52,141 @@ using 'list' command to show all of the commands, then use 'help' command to get
 ```
 
 ![list command](https://p1.meituan.net/travelcube/70b00b644f4d9b5408df122b7c226631140733.png)
+```text
+127.0.0.1:11234>list
+
+---------------------------------------------------------------------------------------------
+Command            	：list
+Round              	：2
+ClientId           	：10000
+ClientType         	：console:1
+Version            	：version:1
+CommandCost        	：4 (ms)
+STW_Cost           	：0 (ms)
+Time:              	: Sun Feb 02 17:22:20 CST 2020
+---------------------------------------------------------------------------------------------
+fc
+help
+list
+exit
+alive
+redefine
+rollback
+lock
+set
+info
+trace
+mt
+ct
+thread
+monitor
+btrace
+
+---------------------------------------------------------------------------------------------
+```
 
 ![help command](https://p1.meituan.net/travelcube/d4a8eaeaa070396cf6f472e53b9685a9111432.png)
+```text
+127.0.0.1:11234>h -cmd list
+
+---------------------------------------------------------------------------------------------
+Command            	：h
+Round              	：3
+ClientId           	：10000
+ClientType         	：console:1
+Version            	：version:1
+CommandCost        	：7 (ms)
+STW_Cost           	：0 (ms)
+Time:              	: Sun Feb 02 17:22:39 CST 2020
+---------------------------------------------------------------------------------------------
+Command    	: list | all
+Function   	: list commands
+Usage      	: list | all
+Type       	: COMPUTE
+
+---------------------------------------------------------------------------------------------
+```
 
 ![monitor command](https://p0.meituan.net/travelcube/74c50cdff72994f8ac6f02d922262528158297.png)
+```text
+--------------------------------------------------------------------------------
+                Thread Dynamic Statistic
+--------------------------------------------------------------------------------
+-----      -----                                              -----      -----
+tid        name                                                 s        cpu%
+-----      -----                                              -----      -----
+11         test-test-R-worker                                   TW       95%
+20         Java-Debug-Tool-WebSocket-Server-Worker              R        5%
+
+Total Thread : 13, New : 0, Runnable : 7, Blocked : 0, Waiting : 4, Timed Waiting : 2, Terminated : 0
+--- System Load ---
+AvailableProcessors                     8
+SystemLoadAverage              3.18652343
+ProcessCpuLoad                 0.01164025
+
+
+--------------------------------------------------------------------------------
+q
+```
 
 ![method trace command](https://p0.meituan.net/travelcube/e19e52ee5dc4aa941d9be79c8e2dc0aa262152.png)
+```text
+127.0.0.1:11234>mt -c R -m call
+
+---------------------------------------------------------------------------------------------
+Command            	：mt
+Round              	：6
+ClientId           	：10000
+ClientType         	：console:1
+Version            	：version:1
+CommandCost        	：411 (ms)
+STW_Cost           	：68 (ms)
+Time:              	: Sun Feb 02 17:23:52 CST 2020
+---------------------------------------------------------------------------------------------
+[R.call] invoke by Thread:Thread[test-test-R-worker,5,main]
+with params
+[
+[0] @class:java.lang.Integer -> 6,
+[1] @class:java.lang.Integer -> 6,
+[2] @class:C -> {"@class":"C","a":0},
+[3] @unknown -> NULL,
+[4] @unknown -> NULL,
+[5] @unknown -> NULL,
+[6] @unknown -> NULL,
+[7] @class:java.util.ArrayList -> ["java.util.ArrayList",[{"@class":"R$MMM","data":"test"}]]
+]
+[0 ms] (73) [mmmList1 = ["java.util.ArrayList",[{"@class":"R$MMM","data":"test"}]]]
+[0 ms] (74)
+[0 ms] (75)
+[0 ms] (79)
+[0 ms] (83) [el = -1]
+[0 ms] (84)
+[0 ms] (89)
+[0 ms] (93)
+[0 ms] (97)
+[0 ms] (99) [sa = 1]
+[0 ms] (100)
+[1 ms] (101) [ii = 0]
+[0 ms] (102) [ij = 0]
+[0 ms] (103) [jk = 1]
+[0 ms] (104) [f = 1.0]
+[0 ms] (105) [d = 0.123]
+[0 ms] (106) [name = "hello6,6"]
+[0 ms] (107) [list = ["java.util.ArrayList",[6,7]]]
+[0 ms] (108)
+[0 ms] (109)
+[0 ms] (110)
+[0 ms] (112)
+[0 ms] (115)
+[0 ms] (118)
+[0 ms] (119)
+throw exception:[java.lang.IllegalArgumentException:  i + j <= 10:66]  at line:119 with cost:3 ms
+ -R.call
+  -R$1.run at line:152
+   -java.lang.Thread.run at line:748
+
+---------------------------------------------------------------------------------------------
+```
 
 [usage](usage.md)
 
