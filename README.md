@@ -129,6 +129,17 @@ enjoy !
 
 ```
 
+### Thanks
+
+* [Netty Project](https://github.com/netty/netty) : Transport support.
+* [JLine](https://github.com/jline/jline2) : Console support.
+* [jna](https://github.com/java-native-access/jna) : java native access support.
+* [ASM](https://github.com/llbit/ow2-asm) :  java bytecode weaver.
+* [arthas](https://github.com/alibaba/arthas) : java-debut-tool reference arthas.
+* [async-profiler](https://github.com/jvm-profiling-tools/async-profiler) : profile support. 
+
+Thanks for the excellent work in these projects !
+
 ### NOTICE
 
 ```text
