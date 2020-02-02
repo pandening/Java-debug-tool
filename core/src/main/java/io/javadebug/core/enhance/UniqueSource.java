@@ -1,0 +1,49 @@
+//
+//  ========================================================================
+//  Copyright (c) 2018-2019 HuJian/Pandening soft collection.
+//  ------------------------------------------------------------------------
+//  All rights reserved. This program and the accompanying materials
+//  are made available under the terms of the #{license} Public License #{version}
+//  EG:
+//      The Eclipse Public License is available at
+//      http://www.eclipse.org/legal/epl-v10.html
+//
+//      The Apache License v2.0 is available at
+//      http://www.opensource.org/licenses/apache2.0.php
+//
+//  You may elect to redistribute this code under either of these licenses.
+//  You should bear the consequences of using the software (named 'java-debug-tool')
+//  and any modify must be create an new pull request and attach an text to describe
+//  the change detail.
+//  ========================================================================
+//
+
+
+/**
+ *   Copyright © 2019-XXX HJ All Rights Reserved
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+//  Author : HJ
+
+
+package io.javadebug.core.enhance;
+
+public interface UniqueSource<T> {
+
+    /**
+     *  在某些情况下，可能需要获取到一个区别各个client/advice的数据，比如uuid等，那
+     *  这个方法就比较有用了
+     *
+     * @return 唯一数据
+     */
+    T get();
+
+}

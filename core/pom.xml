@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.javadebug</groupId>
+    <artifactId>core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Java Dynamic Remote Debug Tools (Core)</name>
+
+    <properties>
+        <asciitable.version>0.3.2</asciitable.version>
+        <jdk.version>1.8</jdk.version>
+        <asm.version>2.0</asm.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <jna.version>5.5.0</jna.version>
+        <netty.version>4.1.25.Final</netty.version>
+        <hessian.version>3.1.5</hessian.version>
+        <jline.version>2.14.6</jline.version>
+        <jopt.version>4.6</jopt.version>
+        <asm.version>6.0</asm.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
+        <commom-io.version>2.4</commom-io.version>
+        <jackson.version>2.9.3</jackson.version>
+        <spring.version>4.3.13.RELEASE</spring.version>
+        <rxjava.veersion>0.20.7</rxjava.veersion>
+        <rxnetty.version>0.4.7</rxnetty.version>
+        <!--<jansi.version>1.17.1</jansi.version>-->
+    </properties>
+
+    <dependencies>
+
+        <!--<dependency>-->
+            <!--<groupId>org.fusesource.jansi</groupId>-->
+            <!--<artifactId>jansi</artifactId>-->
+            <!--<version>${jansi.version}</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash; slf4j &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-http</artifactId>-->
+            <!--<version>${slf4j.version}</version>-->
+            <!--<scope>provided</scope>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
+
+        <!-- jna for invoking native code like libc -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+
+
+        <!-- for java-debug-tool transport -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <!-- java-debug-tool protocol -->
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>hessian</artifactId>
+            <version>${hessian.version}</version>
+        </dependency>
+
+        <!-- for java command line  -->
+        <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>${jline.version}</version>
+        </dependency>
+
+        <!-- for parse command line options -->
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>${jopt.version}</version>
+        </dependency>
+
+        <!-- bytecode & enhance -->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-commons</artifactId>
+            <version>${asm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commom-io.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- spring expression -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.rxjava</groupId>
+            <artifactId>rxjava-core</artifactId>
+            <version>${rxjava.veersion}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- RxNetty for httpServer -->
+        <dependency>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxnetty</artifactId>
+            <version>${rxnetty.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-codec-http</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-transport-native-epoll</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>Java-Debug-Tool-Core</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2-beta-5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>io.javadebug.core.JavaDebugLauncher</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
