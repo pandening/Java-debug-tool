@@ -118,7 +118,7 @@ thread command options:
 
 * top       : [topN] get the topN busy thread info
 * status    : [R(runnable)|W(waiting)|TW(timed waiting)|B(blocking)] get the target status' thread info
-* -tid      : [thread id] get the thread info by thread id
+* tid      : [thread id] get the thread info by thread id
 
 monitor (aka collect) command options :
 * t  : the monitor event type, multi type can split with ',' like thread,mem
@@ -213,10 +213,12 @@ time;usr_ms;sys_ms;avg_usr_ms;avg_sys_ms;nivc_switch_per_sec;nvc_switch_per_sec
         |
         |
         |
-        |____________________________________________
+        |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
                time line [0 - 29] 
 
 ```
+
+for profiling, you can choose [async-profiler](bin/async-profiler) which already including in bin path of java-debug-tool.
 
 ### usage
 
