@@ -12,7 +12,6 @@
         <module>agent</module>
         <module>core</module>
         <module>test</module>
-        <module>spring</module>
     </modules>
 
 </project>

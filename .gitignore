@@ -36,3 +36,4 @@ rebel.xml
 *.jar
 
 /debug-dump-dir
+/spring
