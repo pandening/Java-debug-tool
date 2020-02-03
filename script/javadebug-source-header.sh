@@ -13,7 +13,6 @@ function appendFileHeader() {
      if [[ ${FILE_PATH} == *.java ]]; then
        if [[ `grep -c "Copyright" ${FILE_PATH}` -eq '0' ]]; then
           (echo '0a'; (cat ../header); echo '.'; echo 'wq') | ed -s ${FILE_PATH}
-          sed -i "" "s/mailto:hujian06@meituan.com/H.J/g" ${FILE_PATH}
        fi
      fi
    else
