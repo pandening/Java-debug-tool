@@ -37,6 +37,187 @@ the default port is 11234.
 ./javadebug-client-launch.sh ip:port
 ```
 
+
+### Ability
+
+Java-debug-tool including 2-part ability, debugging and profiling.
+
+#### debugging
+
+debug your code in runtime, the main command list :
+
+* mt (method trace)
+* fc (find class)
+
+the simplest usage of 'mt' command like this : 
+
+```bash
+
+  mt -c [class name with package] -m [method name]
+
+```
+
+there are many other options for mt command:
+
+* timeout   : set command execute timeout (seconds unit)
+* t         : the debug event type
+    * return : stop debug when method exit
+    * throw  : stop debug when method throw exception
+        *       e  ： the target exception class name [with package]
+        *       tl :  set the target invoked line, ref [line]
+        *       te :  set the target line's expression ref [line]   
+    * watch  : stop debug when the params match
+        *       i  : the spring expression
+        *       tl :  set the target invoked line, ref [line]
+        *       te :  set the target line's expression ref [line]   
+    * custom : call method & debug itself 
+        *       i  : the params
+        *       tl :  set the target invoked line, ref [line]
+        *       te :  set the target line's expression ref [line]    
+    * line   : stop debug when special line is invoked(and the spring expression is true). 
+        *       tl :  set the target invoked line
+        *       te :  set the target line's expression
+    * record : record some method calls  
+        *       u  : show the record method call with index [from 0 inc]
+        *       n  : the record count limit
+        *       time : timeout for recording
+* l       :  just show the target line's debug info
+
+for 'fc' command, it's very easy to use:
+
+```bash
+
+[case 1] you know the class name and want to find the class 
+   fc -class [class name]
+[case 2] you just want to find some classes by the regex
+   fc -r [regex to match class]   
+
+
+```
+
+the 'l' option can set the output class limit. like this:
+
+```bash
+
+fc -r regex -l 10
+
+```
+
+#### profiling
+
+
+java-debug-tool can profiling your code, there are some command can get the performance data in run time;
+
+* thread
+* monitor
+* cputime
+
+the thread command can get the cpu usage of each thread, and the call stack, and you can get the topN busy thread by this command:
+
+thread command options:
+
+* top       : [topN] get the topN busy thread info
+* status    : [R(runnable)|W(waiting)|TW(timed waiting)|B(blocking)] get the target status' thread info
+* -tid      : [thread id] get the thread info by thread id
+
+monitor (aka collect) command options :
+* t  : the monitor event type, multi type can split with ',' like thread,mem
+    * thread : the thread statistic info
+    * mem    : the mem info
+    * class  : the class info
+    * gc     : the gc info
+* i  : the interval (secs)
+
+the default event is thread, the default interval is 5 seconds
+
+the cputime command can get the cpu usage of the target jvm, the interval is 30 seconds, the base usage of this command is :
+
+```bash
+
+ct -o csv
+
+```
+
+the 'o' option set the output format, you can set one from [csv,json]; the csv format is recommend, you need to wait 30 seconds
+before the command execute successfully. the output like this:
+
+```text
+
+---------------------------------------------------------------------------------------------
+Command            	：ct
+Round              	：1
+ClientId           	：10000
+ClientType         	：console:1
+Version            	：version:1
+CommandCost        	：32125 (ms)
+STW_Cost           	：0 (ms)
+Time:              	: Mon Feb 03 17:33:10 CST 2020
+---------------------------------------------------------------------------------------------
+Start Time : Mon Feb 03 17:32:38 CST 2020
+Stop Time : Mon Feb 03 17:33:10 CST 2020
+Total cpu usage : 35.425249999999984 ms
+
+time;usr_ms;sys_ms;avg_usr_ms;avg_sys_ms;nivc_switch_per_sec;nvc_switch_per_sec
+0;22.729;13.790;20.770;14.655;514;11
+1;18.769;11.816;20.770;14.655;499;18
+2;19.048;12.215;20.770;14.655;483;13
+3;22.882;14.352;20.770;14.655;483;9
+4;49.963;17.214;20.770;14.655;479;18
+5;23.305;15.979;20.770;14.655;456;16
+6;22.382;13.520;20.770;14.655;491;8
+7;25.801;11.920;20.770;14.655;543;7
+8;18.927;12.211;20.770;14.655;509;14
+9;22.440;9.026;20.770;14.655;541;6
+10;20.290;13.212;20.770;14.655;472;13
+11;19.866;15.524;20.770;14.655;456;5
+12;24.528;16.648;20.770;14.655;447;19
+13;19.002;16.981;20.770;14.655;457;11
+14;20.882;16.202;20.770;14.655;452;15
+15;20.041;15.652;20.770;14.655;484;16
+16;17.661;10.187;20.770;14.655;507;4
+17;15.381;10.135;20.770;14.655;498;12
+18;18.671;16.080;20.770;14.655;446;13
+19;27.149;17.041;20.770;14.655;481;14
+20;18.231;13.681;20.770;14.655;502;14
+21;17.777;13.696;20.770;14.655;480;12
+22;18.266;16.266;20.770;14.655;450;17
+23;20.510;16.447;20.770;14.655;480;13
+24;19.699;16.250;20.770;14.655;474;14
+25;19.966;15.105;20.770;14.655;455;24
+26;25.839;15.825;20.770;14.655;447;15
+27;19.736;16.556;20.770;14.655;455;17
+28;18.673;16.246;20.770;14.655;440;18
+29;18.499;16.801;20.770;14.655;447;16
+
+---------------------------------------------------------------------------------------------
+
+```
+
+* time                  : the time line
+* usr_ms                : user time mills
+* sys_ms                : system time mills
+* avg_usr_ms            : the avg user time mills
+* avg_sys_ms            : the avg system time mills
+* nivc_switch_per_sec   : the nivc switch per sec
+* nvc_switch_per_sec    ：the nvc switch per sec
+
+```text
+        
+        |
+        |
+        |     
+        |
+        |
+    val |
+        |
+        |
+        |
+        |
+        |____________________________________________
+               time line [0 - 29] 
+
+```
+
 ### usage
 
 using 'list' command to show all of the commands, then use 'help' command to get the usage of the command;
