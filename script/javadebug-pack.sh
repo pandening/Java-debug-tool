@@ -36,7 +36,7 @@ ASYNC_PROFILER_DIR_TARGET_DIR=${BASEDIR}/../bin
 ASYNC_PROFILER_ORIGIN_DIR=${BASEDIR}/../async-profiler
 
 # git user name
-USER_NAME=hujian06
+USER_NAME=pandening
 
 function mkdirDir() {
     if [ ! -d $1 ]; then
