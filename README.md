@@ -203,11 +203,6 @@ the agent code, do attach work.
 
 the java-debug-tool's biz codes, including netty-handler, debug-client / debug-server, command handler, etc;
 
-
-* spring
-
-do not edit;
-
 * test
 
 the test module, test codes write here;
