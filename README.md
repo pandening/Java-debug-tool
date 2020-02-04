@@ -284,7 +284,7 @@ can offer many runtime info of target info:
 * exception
 * call stack
 
-![mt command detail](https://p0.meituan.net/travelcube/8edb5611053c3e9a8a610217f3fe2b8d281614.png)
+![mt command detail](https://p1.meituan.net/travelcube/f5ac2f15e1c8794448ed980fe6eed91397685.png)
 
 
 ### usage
