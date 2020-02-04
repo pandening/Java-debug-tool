@@ -220,6 +220,73 @@ time;usr_ms;sys_ms;avg_usr_ms;avg_sys_ms;nivc_switch_per_sec;nvc_switch_per_sec
 
 for profiling, you can choose [async-profiler](bin/async-profiler) which already including in bin path of java-debug-tool.
 
+### Demo 
+
+we will use a simple case to show the usage of java-debug-tool:
+
+```java
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+public class Demo {
+
+    private void say(String word, boolean tag, int rdm) {
+        if (word == null) {
+            word = "test say";
+        }
+        int length = word.length();
+        if (tag) {
+            length += 1;
+        } else {
+            length -= 1;
+        }
+        word += "@" + length;
+        System.out.println(word);
+        if (rdm > 5) {
+            throw new IllegalStateException("test exception");
+        }
+    }
+
+    private static final String[] list = {"a", "ab", "abc", "abcd"};
+
+    public static void main(String[] args) {
+        Demo demo = new Demo();
+        Random random = new Random(47);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for(;;) {
+                    try {
+                        demo.say(list[random.nextInt(4)], random.nextBoolean(), random.nextInt(10));
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, "demo-thread").start();
+    }
+
+}
+
+```
+
+the 'mt' command (aka method trace) is the main command of java-debug-tool, this command 
+can offer many runtime info of target info:
+
+* Action time
+* caller thread
+* method params
+* line cost
+* invoked line number
+* line variables
+* return val
+* exception
+* call stack
+
+![mt command detail](https://p0.meituan.net/travelcube/8edb5611053c3e9a8a610217f3fe2b8d281614.png)
+
+
 ### usage
 
 using 'list' command to show all of the commands, then use 'help' command to get the usage of the command;
