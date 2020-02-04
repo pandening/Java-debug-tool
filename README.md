@@ -505,7 +505,7 @@ enjoy !
 
 ### Thanks
 
-* [Netty Project](https://github.com/netty/netty) : Transport support.
+* [Netty](https://github.com/netty/netty) : Transport support.
 * [JLine](https://github.com/jline/jline2) : Console support.
 * [jna](https://github.com/java-native-access/jna) : java native access support.
 * [ASM](https://github.com/llbit/ow2-asm) :  java bytecode weaver.

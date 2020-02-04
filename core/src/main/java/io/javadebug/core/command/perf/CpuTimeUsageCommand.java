@@ -139,7 +139,7 @@ public class CpuTimeUsageCommand  implements Command {
                     avgSysTab += perReqSuffix;
                 } else {
                     // total cpu usage
-                    csvBuilder.append("Total cpu usage : ").append((avgCpuUsage.avgUsr * 1000) + avgCpuUsage.avgSys * 1000)
+                    csvBuilder.append("Total Avg cpu usage : ").append((avgCpuUsage.avgUsr * 1000) + avgCpuUsage.avgSys * 1000)
                             .append(" ms").append("\n\n");
                 }
                 csvBuilder.append("time").append(split).append(usrTab).append(split).append(sysTab).append(split)
