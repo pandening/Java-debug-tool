@@ -272,7 +272,7 @@ public class Demo {
 ```
 
 the 'mt' command (aka method trace) is the main command of java-debug-tool, this command 
-can offer many runtime info of target info:
+can offer many runtime info of target method:
 
 * Action time
 * caller thread
