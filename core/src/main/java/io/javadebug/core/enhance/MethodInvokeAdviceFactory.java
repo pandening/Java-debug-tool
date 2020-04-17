@@ -36,15 +36,21 @@
 
 package io.javadebug.core.enhance;
 
-import io.javadebug.core.utils.JacksonUtils;
-import io.javadebug.core.data.LRModel;
-import io.javadebug.core.utils.ObjectUtils;
-import io.javadebug.core.log.PSLogger;
+import io.javadebug.com.netflix.numerus.NumerusRollingNumber;
+import io.javadebug.com.netflix.numerus.NumerusRollingPercentile;
 import io.javadebug.core.ServerHook;
-import io.javadebug.core.utils.UTILS;
 import io.javadebug.core.claw.ObjectFieldInterpreter;
+import io.javadebug.core.count.MethodCountEvent;
+import io.javadebug.core.data.LRModel;
 import io.javadebug.core.handler.StopAbleRunnable;
+import io.javadebug.core.log.PSLogger;
+import io.javadebug.core.monitor.CounterEvent;
+import io.javadebug.core.monitor.MonitorEventHandler;
 import io.javadebug.core.transport.RemoteCommand;
+import io.javadebug.core.utils.JacksonUtils;
+import io.javadebug.core.utils.ObjectUtils;
+import io.javadebug.core.utils.UTILS;
+import io.netty.util.Timeout;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -59,11 +65,17 @@ import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;
 
+import static io.javadebug.com.netflix.numerus.NumerusProperty.Factory.asProperty;
 import static io.javadebug.core.handler.CommandHandler.checkTimeoutMe;
 
 public class MethodInvokeAdviceFactory {
@@ -247,6 +259,9 @@ public class MethodInvokeAdviceFactory {
 
                 // the advice
                 return new OnTargetLineBeInvokedAdvice(remoteCommand, cls, method, desc, clazz, targetLineNo, te);
+            }
+            case "info": {
+                return new StatisticMethodAdvice(remoteCommand, cls, method, desc, clazz);
             }
 
         }
@@ -534,6 +549,25 @@ public class MethodInvokeAdviceFactory {
 
     static class OnThrowAdvice extends BaseMethodInvokeAdvice {
 
+        private static final Map<String, String> EXCEPTION_SIMPLE_NAME_MAP = new HashMap<>();
+        static {
+            // throwable
+            EXCEPTION_SIMPLE_NAME_MAP.put("throwable", Throwable.class.getName());
+
+            // exception
+            EXCEPTION_SIMPLE_NAME_MAP.put("exception", Exception.class.getName());
+
+            // npe
+            EXCEPTION_SIMPLE_NAME_MAP.put("npe", NullPointerException.class.getName());
+
+            // number format exception
+            EXCEPTION_SIMPLE_NAME_MAP.put("nfe", NumberFormatException.class.getName());
+
+            // array index out of bound exception
+            EXCEPTION_SIMPLE_NAME_MAP.put("array", ArrayIndexOutOfBoundsException.class.getName());
+
+        }
+
         // the target line the debug-er want to watch
         private int targetLineNo;
 
@@ -541,7 +575,9 @@ public class MethodInvokeAdviceFactory {
         private volatile boolean targetLineBeInvoked = false;
 
         // 目标异常类
+        @Deprecated
         private Class<? extends Throwable> eClass;
+        private String exceptionClass;
 
         private SatisfyPuppet satisfyPuppet = null;
 
@@ -551,14 +587,17 @@ public class MethodInvokeAdviceFactory {
             super(remoteCommand, cls, method, desc, clazz);
 
             // 获取到目标异常类
-            if (!UTILS.isNullOrEmpty(exception)) {
-                // using the current classloader is ok.
-                try {
-                    eClass = (Class<? extends Throwable>) Thread.currentThread().getContextClassLoader().loadClass(exception);
-                } catch (Throwable e) {
-                    PSLogger.error("could not load target throwable class:" + exception + ":" + e);
-                }
-            }
+            exceptionClass = UTILS.nullToEmpty(exception);
+            // trans to real name
+            exceptionClass = EXCEPTION_SIMPLE_NAME_MAP.getOrDefault(exceptionClass, exceptionClass);
+//            if (!UTILS.isNullOrEmpty(exception)) {
+//                // using the current classloader is ok.
+//                try {
+//                    eClass = (Class<? extends Throwable>) Thread.currentThread().getContextClassLoader().loadClass(exception);
+//                } catch (Throwable e) {
+//                    PSLogger.error("could not load target throwable class:" + exception + ":" + e);
+//                }
+//            }
 
             this.targetLineNo = targetLineNo;
             if (targetLineNo < 0) {
@@ -645,7 +684,7 @@ public class MethodInvokeAdviceFactory {
         @Override
         public boolean match(ClassLoader loader, String cls, String method, String desc, Object targetObj, Object[] args, Throwable throwable, Object returnVal) {
             // 是否超时
-            return remoteCommand.needStop() || throwable != null && (eClass == null || eClass.getName().equals(throwable.getClass().getName()));
+            return remoteCommand.needStop() || throwable != null && (exceptionClass.equals(throwable.getClass().getName()));
         }
     }
 
@@ -1189,6 +1228,157 @@ public class MethodInvokeAdviceFactory {
             return true;
         }
 
+    }
+
+    /**
+     *  do the statistic job of the target method. for example, the method invoke count, error
+     *  call count, and the method response TP(tp 50,90,99 avg, max, min) data
+     *
+     *   NOTICE: JUST JOKE, DO NOT USE IN PRODUCT ENV.
+     *   NOTICE: JUST JOKE, DO NOT USE IN PRODUCT ENV.
+     *   NOTICE: JUST JOKE, DO NOT USE IN PRODUCT ENV.
+     *
+     *   ...... FROM EVIL NOTICE ......
+     */
+    static class StatisticMethodAdvice extends BaseMethodInvokeAdvice {
+
+        // the rolling second as 1 second
+        static final int rollingSeconds = 1;
+        static final NumerusRollingNumber counter = new NumerusRollingNumber(MethodCountEvent.SUCCESS,
+                asProperty( rollingSeconds * 1000), asProperty(10));
+        static final NumerusRollingPercentile latency = new NumerusRollingPercentile(asProperty(rollingSeconds * 1000),
+                asProperty(10), asProperty(1000), asProperty(Boolean.TRUE));
+
+        //----------
+        private volatile boolean stopRolling;
+        private Timeout timeout;
+        //private CopyOnWriteArraySet<Class<?>> exceptionSet;
+        private volatile long taskStartMills;
+
+        StatisticMethodAdvice(RemoteCommand remoteCommand, String cls, String method, String desc, Class<?> targetClass) {
+            super(remoteCommand, cls, method, desc, targetClass);
+            //exceptionSet = new CopyOnWriteArraySet<>();
+            counter.reset();
+            latency.reset();
+            stopRolling = false;
+            setupTimeoutTask();
+            taskStartMills = System.currentTimeMillis();
+        }
+
+        private void setupTimeoutTask() {
+            this.timeout = MonitorEventHandler.registerTimer(new Runnable() {
+                @Override
+                public void run() {
+                    stopRolling = true;
+                }
+            }, (rollingSeconds + 1) * 1000);
+        }
+
+        /**
+         * advice的类型，这个很有用
+         *
+         * @return {@link MethodAdviceType}
+         */
+        @Override
+        public MethodAdviceType type() {
+            return MethodAdviceType.ON_RETURN;
+        }
+
+        @Override
+        public boolean needToUnReg(String cls, String method, String desc) {
+            if (stopRolling
+                        || ((System.currentTimeMillis() - taskStartMills) >= (rollingSeconds * 1000))) {
+                adviceDoneLatch.countDown();
+            }
+            return !stopRolling;
+        }
+
+        @Override
+        public void invoke(List<MethodTraceFrame> frames) {
+            super.invoke(frames);
+
+            // get the time cost
+            if (!frames.isEmpty()) {
+
+                long startMills = frames.get(0).getInvokeTimeMills();
+                long stopMills  = frames.get(frames.size() - 1).getInvokeTimeMills();
+
+                latency.addValue((int) (stopMills - startMills));
+            }
+        }
+
+        @Override
+        public boolean match(ClassLoader loader, String cls, String method, String desc,
+                             Object targetObj, Object[] args, Throwable throwable, Object returnVal) {
+            if (throwable != null) {
+                counter.increment(MethodCountEvent.ERROR);
+            } else {
+                counter.increment(MethodCountEvent.SUCCESS);
+            }
+            counter.increment(MethodCountEvent.REQUESTS);
+            return super.match(loader, cls, method, desc, targetObj, args, throwable, returnVal);
+        }
+
+        @Override
+        public List<MethodTraceFrame> traces() {
+            // block the caller thread util the result is ready
+            super.traces();
+            // call print to get the result
+            return null;
+        }
+
+        @Override
+        public String print() {
+
+            // total request
+            // total success
+            // total error
+            // total qps
+            // success qps
+            // error qps
+            // latency
+            //     50
+            //     90
+            //     95
+            //     99
+            //     100
+            //     mean
+
+            ///  ----- show like this -----
+            /*
+             Latency Distribution
+                50%  153.29ms
+                75%  155.97ms
+                90%  165.24ms
+                99%  215.04ms
+             147514 requests in 1.00m, contains 100 error(s), error percent 0.1%
+             Exception Distribution
+                java.lang.NullPointerException    10
+                java.lang.RuntimeException        90
+             Requests/sec:   2455.46
+             */
+
+            StringBuilder rsb = new StringBuilder();
+            rsb.append("Latency Distribution").append("\n");
+
+            rsb.append("    50%     ").append(latency.getPercentile(50.0)).append("ms").append("\n");
+            rsb.append("    75%     ").append(latency.getPercentile(75.0)).append("ms").append("\n");
+            rsb.append("    90%     ").append(latency.getPercentile(90.0)).append("ms").append("\n");
+            rsb.append("    95%     ").append(latency.getPercentile(95.0)).append("ms").append("\n");
+            rsb.append("    99%     ").append(latency.getPercentile(99.0)).append("ms").append("\n");
+
+            long total = counter.getRollingSum(MethodCountEvent.REQUESTS);
+            long error = counter.getRollingSum(MethodCountEvent.ERROR);
+            double errorPct = error / (total * 1.0);
+            rsb.append(total)
+                    .append(" requests in ").append(rollingSeconds).append(" (s), contains ")
+                    .append(error).append(" error(s)")
+                    .append(" error percent ").append(String.format("%.2f", errorPct * 100)).append("%\n");
+
+            rsb.append("Requests/sec: ").append(counter.getRollingSum(MethodCountEvent.REQUESTS)).append("\n");
+
+            return rsb.toString();
+        }
     }
 
     static class RecordAdvice extends BaseMethodInvokeAdvice {

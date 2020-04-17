@@ -148,6 +148,11 @@ public abstract class BaseMethodInvokeAdvice implements MethodInvokeAdvice {
         return frames;
     }
 
+    @Override
+    public String print() {
+        return null;
+    }
+
     /**
      * 用于判断是否满足要求的方法，这个方法将在原始方法return或者throw之后调用，所以会携带的信息
      * 很多，你可以根据自己的需求判断是否可以结束本次advice（unregister），比如需要实现onReturn

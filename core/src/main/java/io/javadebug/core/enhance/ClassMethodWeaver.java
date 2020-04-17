@@ -432,7 +432,7 @@ public class ClassMethodWeaver extends ClassVisitor implements Opcodes {
 
     }
 
-    private static Type WEAVE_SPY_TYPE;
+    static Type WEAVE_SPY_TYPE;
 
     static {
         try {
@@ -452,9 +452,9 @@ public class ClassMethodWeaver extends ClassVisitor implements Opcodes {
 
     private static final Type THROWABLE_TYPE                        = Type.getType(Throwable.class);
 
-    private static final Type METHOD_Type                           = Type.getType(java.lang.reflect.Method.class);
+    static final Type METHOD_Type                           = Type.getType(java.lang.reflect.Method.class);
 
-    private static final Method METHOD_INVOKE_METHOD                = Method.getMethod("Object invoke(Object,Object[])");
+    static final Method METHOD_INVOKE_METHOD                = Method.getMethod("Object invoke(Object,Object[])");
 
 
     /**
@@ -562,6 +562,20 @@ public class ClassMethodWeaver extends ClassVisitor implements Opcodes {
 
 
     // static advice method area
+
+    private static final Map<String, String> IGNORE_CLASS_METHOD_MAP  = new HashMap<>();
+    static {
+        IGNORE_CLASS_METHOD_MAP.put("", "");
+    }
+
+    /**
+     *  check the block call.
+     *
+     * @param nonBlockingThreadNamePattern match the non-blocking thread name
+     */
+    public static void checkBlock(String nonBlockingThreadNamePattern) {
+        throw new UnsupportedOperationException("do not all me !");
+    }
 
     /**
      *  当某个方法被访问的时候，会首先通知该方法
@@ -1650,6 +1664,9 @@ public class ClassMethodWeaver extends ClassVisitor implements Opcodes {
                             break;
                         case "field":
                             getStatic(WEAVE_SPY_TYPE, "ON_METHOD_FIELD_INVOKE_CALL", METHOD_Type);
+                            break;
+                        case "tb":
+                            getStatic(WEAVE_SPY_TYPE, "IS_IN_NON_BLOCKING_THREAD_METHOD", METHOD_Type);
                             break;
                         default:
                             throw new IllegalArgumentException("illegal advice key:" + adviceMethod);

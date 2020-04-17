@@ -115,6 +115,26 @@ public class MonitorEventHandler {
         }
     }
 
+    ///---------------- public method start ---------------------
+
+    /**
+     *  register an timer to the hashWheel
+     *
+     * @param job the job
+     * @param delayMills the timeout mills
+     * @return the timeout object
+     */
+    public static Timeout registerTimer(Runnable job, long delayMills) {
+        return hashedWheelTimer.newTimeout(new TimerTask() {
+            @Override
+            public void run(Timeout timeout) throws Exception {
+                job.run();
+            }
+        }, delayMills, TimeUnit.MILLISECONDS);
+    }
+
+    ///---------------- public method  end  ---------------------
+
     public static void setMonitorRequestTypes(String monitorRequestTypes) {
         MonitorEventHandler.MONITOR_REQUEST_TYPES = monitorRequestTypes;
     }

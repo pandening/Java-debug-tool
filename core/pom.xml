@@ -27,6 +27,8 @@
         <spring.version>4.3.13.RELEASE</spring.version>
         <rxjava.veersion>0.20.7</rxjava.veersion>
         <rxnetty.version>0.4.7</rxnetty.version>
+        <reactor-core.version>3.3.4.RELEASE</reactor-core.version>
+        <javassist.version>3.12.1.GA</javassist.version>
         <!--<jansi.version>1.17.1</jansi.version>-->
     </properties>
 
@@ -54,6 +56,12 @@
             <version>${jna.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+        </dependency>
 
         <!-- for java-debug-tool transport -->
         <dependency>
@@ -158,6 +166,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!--&lt;!&ndash; reactor-core &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>io.projectreactor</groupId>-->
+            <!--<artifactId>reactor-core</artifactId>-->
+            <!--<version>${reactor-core.version}</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>commons-logging</artifactId>-->
+                    <!--<groupId>commons-logging</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
     </dependencies>
 

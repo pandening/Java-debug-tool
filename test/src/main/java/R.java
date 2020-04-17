@@ -19,7 +19,9 @@
 //
 
 
+import io.javadebug.core.log.PSLogger;
 import io.javadebug.core.utils.JacksonUtils;
+import io.javadebug.core.utils.UTILS;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class R {
@@ -66,9 +70,18 @@ public class R {
         }
     }
 
+    public static void sleep(long millis, int nanos) {
+
+    }
+
     public int call(int i, int j, C c, int[] dd, List<Long> e, long[] ff, Long[] g, List<MMM> mmmList) {
 
 //        LOGGER.error("i am log4j, test print log here ~");
+        try {
+            TimeUnit.MILLISECONDS.sleep(i + j);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
+        }
 
         List<MMM> mmmList1 = mmmList;
         System.out.println(mmmList1);
@@ -135,8 +148,16 @@ public class R {
 
         R r = new R();
         Random random = new Random(47);
+        Thread.UncaughtExceptionHandler uncaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                PSLogger.error("UncaughtExceptionHandler : " + UTILS.getErrorMsg(e) + " Thread : " + t.getName());
+            }
+        };
 
-        new Thread(new Runnable() {
+        ExecutorService printer = Executors.newSingleThreadExecutor();
+
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
@@ -150,18 +171,35 @@ public class R {
                         List<MMM> mmms = new ArrayList<>();
                         mmms.add(new MMM("test"));
                         System.out.println(r.call(random.nextInt(10), random.nextInt(10), new C(), null, null, null, null, mmms));
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         //System.out.println(e.getMessage());
+                        printer.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                e.printStackTrace();
+                            }
+                        });
                     } finally {
                         try {
-                            TimeUnit.MILLISECONDS.sleep(2);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                                TimeUnit.MILLISECONDS.sleep(10);
+                        } catch (Throwable e) {
+                            printer.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    e.printStackTrace();
+                                }
+                            });
                         }
                     }
                 }
             }
-        }, "test-test-R-worker").start();
+        }, "test-test-R-worker-ok");
+        t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+        try {
+            t.start();
+        } catch (Throwable e) {
+            System.out.println("error to start thread...");
+        }
 
     }
 

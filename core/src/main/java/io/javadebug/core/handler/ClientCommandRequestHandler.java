@@ -37,6 +37,7 @@
 package io.javadebug.core.handler;
 
 import io.javadebug.core.CommandInputHandler;
+import io.javadebug.core.command.ThreadBlockHoundCommand;
 import io.javadebug.core.log.PSLogger;
 import io.javadebug.core.utils.UTILS;
 import io.javadebug.core.exception.CommandNotFindException;
@@ -106,6 +107,9 @@ public class ClientCommandRequestHandler extends BaseCommandRequestHandler {
 
         COMMAND_INPUT_HANDLER_MAP.put("list", ListInputHandler.LIST_INPUT_HANDLER);
         COMMAND_INPUT_HANDLER_MAP.put("all", ListInputHandler.LIST_INPUT_HANDLER);
+
+        COMMAND_INPUT_HANDLER_MAP.put("tb", ThreadBlockHoundInputHandler.THREAD_BLOCK_HOUND_INPUT_HANDLER);
+        COMMAND_INPUT_HANDLER_MAP.put("block", ThreadBlockHoundInputHandler.THREAD_BLOCK_HOUND_INPUT_HANDLER);
 
         COMMAND_INPUT_HANDLER_MAP.put("monitor", MonitorInputHandler.MONITOR_INPUT_HANDLER);
         COMMAND_INPUT_HANDLER_MAP.put("collect", MonitorInputHandler.MONITOR_INPUT_HANDLER);
@@ -449,6 +453,36 @@ public class ClientCommandRequestHandler extends BaseCommandRequestHandler {
                            .addParam("$forward-monitor-type", type)
                            .addParam("$forward-monitor-interval", iop)
                     ;
+        }
+    }
+
+    enum ThreadBlockHoundInputHandler implements CommandInputHandler {
+        THREAD_BLOCK_HOUND_INPUT_HANDLER
+        ;
+
+        /**
+         * 这个方法用来实现将客户端的命令输入转换成{@link RemoteCommand}的过程
+         * 是命令在客户端输入之后的处理
+         *
+         * @param args   命令参数
+         * @param origin 客户端持有的协议对象
+         * @return {@link RemoteCommand} 最终将被传输到服务端的命令协议
+         * @throws Exception 处理异常
+         */
+        @Override
+        public RemoteCommand toCommand(String[] args, RemoteCommand origin) throws Exception {
+            final OptionParser parser = new OptionParser();
+            parser.accepts("name").withOptionalArg().ofType(String.class);
+
+            final OptionSet optionSet = parser.parse(args);
+
+            String name = "";
+
+            if (optionSet.has("name")) {
+                name = (String) optionSet.valueOf("name");
+            }
+
+            return origin.clearShit().addParam("$forward-tb-name", name).setCommandName("tb");
         }
     }
 

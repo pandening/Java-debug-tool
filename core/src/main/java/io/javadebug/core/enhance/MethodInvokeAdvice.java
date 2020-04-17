@@ -84,6 +84,22 @@ public interface MethodInvokeAdvice {
     List<MethodTraceFrame> traces();
 
     /**
+     *  get the result from this method, but this method must call after traces, the common
+     *  code maybe like this:
+     *
+     *  String result;
+     *  List<MethodTraceFrame> traces = advice.traces()
+     *  if (traces == null) {
+     *      result = advice.print();
+     *  } else {
+     *      result = traceHandle(traces)
+     *  }
+     *
+     * @return the result
+     */
+    String print();
+
+    /**
      *  weave需要做一些基础的判断，否则其他方法的trace也会通知过来
      *
      * @return {@link MethodDesc}

@@ -74,6 +74,9 @@ public class WeaveSpy {
     // field notice
     public static Method ON_METHOD_FIELD_INVOKE_CALL;
 
+    // thread block hound check method
+    public static Method IS_IN_NON_BLOCKING_THREAD_METHOD;
+
     //------------------------------------------------------------
 
     /**
@@ -108,7 +111,8 @@ public class WeaveSpy {
                                            Method ON_METHOD_IN_SPECIAL_DATA_TRANS,
                                            Method ON_METHOD_IN_SPECIAL_CONDITION_JUDGE,
                                            Method ON_METHOD_IN_SPECIAL_CONDITION_TRANS_DATA_GET,
-                                           Method ON_METHOD_FIELD_INVOKE
+                                           Method ON_METHOD_FIELD_INVOKE,
+                                           Method IS_IN_NON_BLOCKING_THREAD_METHOD_INVOKE
                                            ) {
 
         ON_METHOD_ENTER_CALL = ON_METHOD_ENTER;
@@ -129,6 +133,43 @@ public class WeaveSpy {
         ON_METHOD_IN_SPECIAL_CONDITION_TRANS_DATA_GET_CALL = ON_METHOD_IN_SPECIAL_CONDITION_TRANS_DATA_GET;
 
         ON_METHOD_FIELD_INVOKE_CALL = ON_METHOD_FIELD_INVOKE;
+
+        IS_IN_NON_BLOCKING_THREAD_METHOD = IS_IN_NON_BLOCKING_THREAD_METHOD_INVOKE;
+    }
+
+    /**
+     *  check the block call.
+     *
+     * @param nonBlockingThreadNamePattern match the non-blocking thread name
+     */
+    public static void checkBlock(String nonBlockingThreadNamePattern) {
+        if (nonBlockingThreadNamePattern == null || nonBlockingThreadNamePattern.isEmpty()) {
+            nonBlockingThreadNamePattern = "NonBlocking";
+        }
+        boolean blockCheckPass = true;
+
+        // thread name check
+        if (Thread.currentThread().getName().contains(nonBlockingThreadNamePattern)) {
+            blockCheckPass = false;
+        }
+
+        // thread stack check
+        if (!blockCheckPass) {
+            // check the stack
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            for (int i = 0; i < 10 && i < stackTrace.length; i ++) {
+                StackTraceElement ste = stackTrace[i];
+//                String ignore = IGNORE_CLASS_METHOD_MAP.get(ste.getClassName());
+//                if (!(ignore == null || ignore.isEmpty()) && ignore.contains(ste.getMethodName())) {
+//                    return;
+//                }
+            }
+        }
+
+        if (!blockCheckPass) {
+            throw new IllegalStateException("thread are blocking, which is not supported in thread :"
+                                                    + Thread.currentThread().getName());
+        }
     }
 
 }

@@ -131,7 +131,8 @@ public class Agent {
                 weaveClass.getMethod("invokeSpecialDataTrans", Object.class),
                 weaveClass.getMethod("checkSpecialCondition", ClassLoader.class, String.class, String.class, String.class, Object.class, Object[].class),
                 weaveClass.getMethod("specialDataTransGet"),
-                weaveClass.getMethod("onFieldNotice", int.class, String.class, String.class, String.class, Object.class)
+                weaveClass.getMethod("onFieldNotice", int.class, String.class, String.class, String.class, Object.class),
+                weaveClass.getMethod("checkBlock", String.class)
                 );
 
         System.err.println("成功加载weave spy");

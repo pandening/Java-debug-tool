@@ -46,6 +46,14 @@ import java.util.Date;
  */
 public class PSLogger {
 
+//    static {
+//        try {
+//            Class.forName("io.javadebug.agent.WeaveSpy");
+//        } catch (Exception e) {
+//            System.err.println("could not load class: io.javadebug.agent.WeaveSpy" + e.getMessage());
+//        }
+//    }
+
     private static final PrintStream eps = System.err;
     private static final PrintStream ops = System.out;
 

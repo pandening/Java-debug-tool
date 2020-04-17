@@ -392,6 +392,12 @@ public class MethodTraceCommand implements Command {
 
         List<MethodTraceFrame> methodTraceCommandList = methodInvokeAdvice.traces();
 
+        // if the traces is null, get the result from print
+        if (methodTraceCommandList == null) {
+            PSLogger.error("could not get method traces, get the result from advice.print()");
+            return methodInvokeAdvice.print();
+        }
+
         // 已经设置了结果了
         if (reqRemoteCommand.hasResult()) {
             return "<result:2>";

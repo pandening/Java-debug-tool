@@ -299,7 +299,8 @@ public class MethodTraceEnhance implements CommonClassFileTransformer {
                                     agentSpyClass.getField("ON_METHOD_IN_SPECIAL_DATA_TRANS_CALL").get(null),
                                     agentSpyClass.getField("ON_METHOD_IN_SPECIAL_CONDITION_JUDGE_CALL").get(null),
                                     agentSpyClass.getField("ON_METHOD_IN_SPECIAL_CONDITION_TRANS_DATA_GET_CALL").get(null),
-                                    agentSpyClass.getField("ON_METHOD_FIELD_INVOKE_CALL").get(null)
+                                    agentSpyClass.getField("ON_METHOD_FIELD_INVOKE_CALL").get(null),
+                                    agentSpyClass.getField("IS_IN_NON_BLOCKING_THREAD_METHOD").get(null)
                                     );
                         } catch (Throwable throwable) {
                             PSLogger.error("ignore the error:" + throwable);

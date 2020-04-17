@@ -55,6 +55,7 @@ import io.javadebug.core.command.MonitorCollectorCommand;
 import io.javadebug.core.command.OptionCommand;
 import io.javadebug.core.command.RedefineClassCommand;
 import io.javadebug.core.command.RollbackClassCommand;
+import io.javadebug.core.command.ThreadBlockHoundCommand;
 import io.javadebug.core.command.perf.CpuTimeUsageCommand;
 import io.javadebug.core.command.perf.ThreadCommand;
 import io.javadebug.core.data.LRModel;
@@ -405,6 +406,9 @@ public class CommandHandler extends SimpleChannelInboundHandler<RemoteCommand> i
         COMMAND_MAP.put("btrace", BTraceCommand.class);
         COMMAND_MAP.put("bt", BTraceCommand.class);
         COMMAND_LIST += "btrace\n";
+
+        COMMAND_MAP.put("tb", ThreadBlockHoundCommand.class);
+        COMMAND_MAP.put("block", ThreadBlockHoundCommand.class);
 
         /// 初始化周期性任务
         NETTY_SERVER_SCHEDULER.scheduleAtFixedRate(new Runnable() {
