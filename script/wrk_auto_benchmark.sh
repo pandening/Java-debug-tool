@@ -121,28 +121,39 @@ function killSelf() {
 #  parse the benchmark data
 #
 function parse_benchmark_result() {
+
     awk 'BEGIN {
-        print "qps;avg_cost_ms;per_cpu;cpu_usage;usr_usage;sys_usage";
-                qps="";avg_cost="";per_cpu="";cpu_usage="";usr_usage="";sys_usage="";
-            }
+             print "connecton qps avg_cost_ms per_cpu cpu_usage usr_usage sys_usage";
+                     connection="";qps="";avg_cost="";per_cpu="";cpu_usage="";usr_usage="";sys_usage="";
 
-               {
-                    if (match($0,"Requests/sec:")){qps=$2};
+                 }
 
-                    if(match($0,"Latency   ")){avg_cost=substr($2,0,length($2)-2)};
+                    {    if (match($0, "threads and")) {connection=$4};
+                         if (match($0,"Requests/sec:")){
+                         qps=$2;
+                         };
 
-                    if(match($0,"Total cpu usage :")){cpu_usage = $5};
+                         if(match($0,"Latency   ")){avg_cost=substr($2,0,length($2)-2)};
 
-                    if(match($0,"time;usr_ms;sys_ms;")){getline;split($0,arr,";"); usr_usage=arr[4];sys_usage=arr[5];};
+                         if(match($0,"Total cpu usage :")){cpu_usage = $5};
 
-                    #if(qps != "" && avg_cost != "" && cpu_usage != "" && usr_usage != "" && sys_usage != "")
-                        if(qps != "" && avg_cost != "" )
-                            {print qps";"avg_cost";"per_cpu";"cpu_usage";"usr_usage";"sys_usage;
-                                qps="";avg_cost="";per_cpu="";cpu_usage="";usr_usage="";sys_usage="";
-                }
+                         if(match($0,"time;usr_ms;sys_ms;"))
+                         {
+                           getline;
+                           split($0,arr,";");
+                           usr_usage=arr[4];
+                           sys_usage=arr[5];
+                           cpu_usage=arr[4] + arr[5];
+                        };
 
-            }
-    ' $*
+                         if(connection != "" && qps != "" && avg_cost != "" && cpu_usage != "" && usr_usage != "" && sys_usage != "")
+                                 {printf "%s %s %s %.2f %s %s %s\n", connection, qps, avg_cost, cpu_usage/qps, cpu_usage, usr_usage, sys_usage
+                                     connection="";qps="";avg_cost="";per_cpu="";cpu_usage="";usr_usage="";sys_usage="";
+                     }
+
+                 }
+         ' $*
+
 }
 
 #

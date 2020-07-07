@@ -23,6 +23,8 @@ package io.javadebug.core.command;
 
 import io.javadebug.core.CommandServer;
 import io.javadebug.core.ServerHook;
+import io.javadebug.core.annotation.CommandDescribe;
+import io.javadebug.core.annotation.CommandType;
 import io.javadebug.core.enhance.MethodDesc;
 import io.javadebug.core.enhance.ThreadBlockHoundTransformer;
 import io.javadebug.core.log.PSLogger;
@@ -50,7 +52,19 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
+@CommandDescribe(
+        name = "thread block",
+                        simpleName = "tb",
+                        function = "detect the block thread",
+                        usage = "tb -name [thread name] -re [1]",
+                        cmdType = CommandType.ENHANCE
+
+)
 public class ThreadBlockHoundCommand implements Command {
+
+    private static final Object monitor = new Object();
+
+    private static volatile boolean enhanced = false;
 
     private static String getMethodDesc(java.lang.reflect.Method origin) {
         return Method.getMethod(origin).getDescriptor();
@@ -74,24 +88,24 @@ public class ThreadBlockHoundCommand implements Command {
         }});
         HOOK_CLASS_LIST.add(Thread.class);
 
-        // Forbid: System.out.println("");
-        put(PrintStream.class.getName(), new HashSet<MethodDesc>(){{
-            try {
-                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", int.class).getName(),
-                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", int.class)), PrintStream.class));
-                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", char[].class).getName(),
-                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", char[].class)), PrintStream.class));
-                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", String.class).getName(),
-                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", String.class)), PrintStream.class));
-                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", byte[].class, int.class, int.class).getName(),
-                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", byte[].class, int.class, int.class)), PrintStream.class));
-                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("newLine").getName(),
-                        getMethodDesc(PrintStream.class.getDeclaredMethod("newLine")), PrintStream.class));
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }});
-        HOOK_CLASS_LIST.add(PrintStream.class);
+//        // Forbid: System.out.println("");
+//        put(PrintStream.class.getName(), new HashSet<MethodDesc>(){{
+//            try {
+//                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", int.class).getName(),
+//                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", int.class)), PrintStream.class));
+//                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", char[].class).getName(),
+//                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", char[].class)), PrintStream.class));
+//                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", String.class).getName(),
+//                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", String.class)), PrintStream.class));
+//                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("write", byte[].class, int.class, int.class).getName(),
+//                        getMethodDesc(PrintStream.class.getDeclaredMethod("write", byte[].class, int.class, int.class)), PrintStream.class));
+//                add(new MethodDesc(PrintStream.class.getName(), PrintStream.class.getDeclaredMethod("newLine").getName(),
+//                        getMethodDesc(PrintStream.class.getDeclaredMethod("newLine")), PrintStream.class));
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            }
+//        }});
+//        HOOK_CLASS_LIST.add(PrintStream.class);
 
 //        // java.lang.Object
 //        // wait
@@ -137,39 +151,39 @@ public class ThreadBlockHoundCommand implements Command {
         }});
         HOOK_CLASS_LIST.add(RandomAccessFile.class);
 
-        // java.net.Socket
-        put(Socket.class.getName(), new HashSet<MethodDesc>(){{
-            try {
-                // connect
+//        // java.net.Socket
+//        put(Socket.class.getName(), new HashSet<MethodDesc>(){{
+//            try {
+//                // connect
+//
+//                add(new MethodDesc(Socket.class.getName(), Socket.class.getDeclaredMethod("connect", SocketAddress.class).getName(),
+//                        getMethodDesc(Socket.class.getDeclaredMethod("connect", SocketAddress.class)), Socket.class));
+//
+//                add(new MethodDesc(Socket.class.getName(), Socket.class.getDeclaredMethod("connect", SocketAddress.class, int.class).getName(),
+//                        getMethodDesc(Socket.class.getDeclaredMethod("connect", SocketAddress.class, int.class)), Socket.class));
+//
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            }
+//        }});
+//        HOOK_CLASS_LIST.add(Socket.class);
 
-                add(new MethodDesc(Socket.class.getName(), Socket.class.getDeclaredMethod("connect", SocketAddress.class).getName(),
-                        getMethodDesc(Socket.class.getDeclaredMethod("connect", SocketAddress.class)), Socket.class));
-
-                add(new MethodDesc(Socket.class.getName(), Socket.class.getDeclaredMethod("connect", SocketAddress.class, int.class).getName(),
-                        getMethodDesc(Socket.class.getDeclaredMethod("connect", SocketAddress.class, int.class)), Socket.class));
-
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }});
-        HOOK_CLASS_LIST.add(Socket.class);
-
-        // java.net.DatagramSocket
-        put(DatagramSocket.class.getName(), new HashSet<MethodDesc>(){{
-            try {
-                // connect
-
-                add(new MethodDesc(DatagramSocket.class.getName(), DatagramSocket.class.getDeclaredMethod("connect", SocketAddress.class).getName(),
-                        getMethodDesc(DatagramSocket.class.getDeclaredMethod("connect", SocketAddress.class)), DatagramSocket.class));
-
-                add(new MethodDesc(DatagramSocket.class.getName(), DatagramSocket.class.getDeclaredMethod("connect", InetAddress.class, int.class).getName(),
-                        getMethodDesc(DatagramSocket.class.getDeclaredMethod("connect", InetAddress.class, int.class)), DatagramSocket.class));
-
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-        }});
-        HOOK_CLASS_LIST.add(DatagramSocket.class);
+//        // java.net.DatagramSocket
+//        put(DatagramSocket.class.getName(), new HashSet<MethodDesc>(){{
+//            try {
+//                // connect
+//
+//                add(new MethodDesc(DatagramSocket.class.getName(), DatagramSocket.class.getDeclaredMethod("connect", SocketAddress.class).getName(),
+//                        getMethodDesc(DatagramSocket.class.getDeclaredMethod("connect", SocketAddress.class)), DatagramSocket.class));
+//
+//                add(new MethodDesc(DatagramSocket.class.getName(), DatagramSocket.class.getDeclaredMethod("connect", InetAddress.class, int.class).getName(),
+//                        getMethodDesc(DatagramSocket.class.getDeclaredMethod("connect", InetAddress.class, int.class)), DatagramSocket.class));
+//
+//            } catch (NoSuchMethodException e) {
+//                e.printStackTrace();
+//            }
+//        }});
+//        HOOK_CLASS_LIST.add(DatagramSocket.class);
 
         // java.io.FileInputStream
         put(FileInputStream.class.getName(), new HashSet<MethodDesc>(){{
@@ -265,6 +279,9 @@ public class ThreadBlockHoundCommand implements Command {
                 add(new MethodDesc(CompletableFuture.class.getName(), CompletableFuture.class.getDeclaredMethod("get", long.class, TimeUnit.class).getName(),
                         getMethodDesc(CompletableFuture.class.getDeclaredMethod("get", long.class, TimeUnit.class)), CompletableFuture.class));
 
+//                add(new MethodDesc(CompletableFuture.class.getName(), CompletableFuture.class.getDeclaredMethod("join").getName(),
+//                        getMethodDesc(CompletableFuture.class.getDeclaredMethod("join")), CompletableFuture.class));
+
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
@@ -296,23 +313,40 @@ public class ThreadBlockHoundCommand implements Command {
      */
     @Override
     public String execute(Instrumentation ins, RemoteCommand reqRemoteCommand, CommandServer commandServer, ServerHook serverHook) throws Exception {
-
-        // the thread name pattern
-        String threadNamePattern = reqRemoteCommand.getParam("$forward-tb-name");
-
-        ThreadBlockHoundTransformer threadBlockHoundTransformer = new ThreadBlockHoundTransformer(BLOCK_CHECK_HOOK_METHOD, "", threadNamePattern);
-        ins.addTransformer(threadBlockHoundTransformer, true);
-
-        try {
-            ins.retransformClasses(HOOK_CLASS_LIST.toArray(new Class[HOOK_CLASS_LIST.size()]));
-        } catch (Throwable e) {
-            PSLogger.error("error", e);
-            return "error:" + UTILS.getErrorMsg(e);
-        } finally {
-            ins.removeTransformer(threadBlockHoundTransformer);
+        boolean reEnhanceTag = false;
+        String reEnhance = reqRemoteCommand.getParam("$forward-tb-re");
+        if (!UTILS.isNullOrEmpty(reEnhance) && "1".equals(reEnhance)) {
+            reEnhanceTag = true; // re enhance
+        }
+        if (!reEnhanceTag && enhanced) {
+            return "enhanced";
         }
 
-        return "ok";
+        // single thread will do the enhance
+        synchronized (monitor) {
+
+            // double check
+            if (!reEnhanceTag && enhanced) {
+                return "already enhanced";
+            }
+
+            // the thread name pattern
+            String threadNamePattern = reqRemoteCommand.getParam("$forward-tb-name");
+
+            ThreadBlockHoundTransformer threadBlockHoundTransformer = new ThreadBlockHoundTransformer(BLOCK_CHECK_HOOK_METHOD, "", threadNamePattern);
+            ins.addTransformer(threadBlockHoundTransformer, true);
+
+            try {
+                ins.retransformClasses(HOOK_CLASS_LIST.toArray(new Class[HOOK_CLASS_LIST.size()]));
+                return "ok";
+            } catch (Throwable e) {
+                PSLogger.error("error", e);
+                return "error:" + UTILS.getErrorMsg(e);
+            } finally {
+                ins.removeTransformer(threadBlockHoundTransformer);
+                enhanced = true;
+            }
+        }
     }
 
     /**

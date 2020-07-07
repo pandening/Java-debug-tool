@@ -41,7 +41,7 @@ import java.util.function.Function;
 public class InnerCalss {
 
 
-    class InnerA {
+    public class InnerA {
 
         private int in(int c) {
             return c;

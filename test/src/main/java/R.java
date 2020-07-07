@@ -74,7 +74,18 @@ public class R {
 
     }
 
+    public class RRRRRR {
+        String a,b,c;
+
+        void hello() {
+            System.out.println("==========> hello world <==========");
+        }
+    }
+
     public int call(int i, int j, C c, int[] dd, List<Long> e, long[] ff, Long[] g, List<MMM> mmmList) {
+
+        RRRRRR r = new RRRRRR();
+        r.hello();
 
 //        LOGGER.error("i am log4j, test print log here ~");
         try {

@@ -144,31 +144,87 @@ public class WeaveSpy {
      */
     public static void checkBlock(String nonBlockingThreadNamePattern) {
         if (nonBlockingThreadNamePattern == null || nonBlockingThreadNamePattern.isEmpty()) {
-            nonBlockingThreadNamePattern = "NonBlocking";
+            return; // ignore check
         }
         boolean blockCheckPass = true;
-
-        // thread name check
-        if (Thread.currentThread().getName().contains(nonBlockingThreadNamePattern)) {
-            blockCheckPass = false;
+        String[] threadNames = nonBlockingThreadNamePattern.split(",");
+        for (String tn : threadNames) {
+            // thread name check
+            if (Thread.currentThread().getName().contains(tn)) {
+                blockCheckPass = false;
+                break;
+            }
         }
+
+        String blockingCall = "";
 
         // thread stack check
         if (!blockCheckPass) {
             // check the stack
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            for (int i = 0; i < 10 && i < stackTrace.length; i ++) {
+            if (stackTrace.length > 2) {
+                blockingCall = stackTrace[2].toString();
+            }
+            for (int i = 0; i < 20 && i < stackTrace.length; i ++) {
                 StackTraceElement ste = stackTrace[i];
-//                String ignore = IGNORE_CLASS_METHOD_MAP.get(ste.getClassName());
-//                if (!(ignore == null || ignore.isEmpty()) && ignore.contains(ste.getMethodName())) {
-//                    return;
-//                }
+                String ignore = ",";
+                switch (ste.getClassName()) {
+                    case "java.util.concurrent.ScheduledThreadPoolExecutor":
+                    {
+                        ignore = "scheduleAtFixedRate,submit,";
+                        break;
+                    }
+                    case "java.lang.ClassLoader":
+                    {
+                        ignore = "loadClass";
+                        break;
+                    }
+                    case "java.net.URLClassLoader":
+                    {
+                        ignore = "findClass,defineClass,";
+                        break;
+                    }
+                    case "java.util.concurrent.ThreadPoolExecutor":
+                    {
+                        ignore = "runWorker,";
+                        break;
+                    }
+                    case "java.util.UUID":
+                    {
+                        ignore = "randomUUID,";
+                        break;
+                    }
+                    case "java.util.concurrent.AbstractExecutorService":
+                    {
+                        ignore = "submit,";
+                        break;
+                    }
+                    case "java.util.concurrent.ArrayBlockingQueue":
+                    case "java.util.concurrent.LinkedBlockingDeque":
+                    case "java.util.concurrent.DelayQueue":
+                    case "java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue":
+                    {
+                        ignore = "offer,add,put,take,poll,remove";
+                        break;
+                    }
+                }
+
+                // check
+                if (ignore.contains(ste.getMethodName())) {
+                    return; // ignore this blocking call
+                }
             }
         }
 
         if (!blockCheckPass) {
-            throw new IllegalStateException("thread are blocking, which is not supported in thread :"
-                                                    + Thread.currentThread().getName());
+//            throw new IllegalStateException("[BlockHound] thread are blocking, which is not supported in thread :"
+//                                                    + Thread.currentThread().getName());
+
+            // just print the warn message
+            System.err.println("[BlockHound] thread are blocking, which is not supported in thread :"
+                                       + Thread.currentThread().getName() + "\n         The blocking call is:[" + blockingCall + "]");
+            // print the stack
+            new RuntimeException().printStackTrace();
         }
     }
 

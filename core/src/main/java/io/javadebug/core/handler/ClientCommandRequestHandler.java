@@ -473,16 +473,23 @@ public class ClientCommandRequestHandler extends BaseCommandRequestHandler {
         public RemoteCommand toCommand(String[] args, RemoteCommand origin) throws Exception {
             final OptionParser parser = new OptionParser();
             parser.accepts("name").withOptionalArg().ofType(String.class);
+            parser.accepts("re").withOptionalArg().ofType(String.class);
 
             final OptionSet optionSet = parser.parse(args);
 
-            String name = "";
+            String name = "", reEnhance = "";
 
             if (optionSet.has("name")) {
                 name = (String) optionSet.valueOf("name");
             }
 
-            return origin.clearShit().addParam("$forward-tb-name", name).setCommandName("tb");
+            if (optionSet.has("re")) {
+                reEnhance = (String) optionSet.valueOf("re");
+            }
+
+            return origin.clearShit().addParam("$forward-tb-name", name)
+                           .addParam("$forward-tb-re", reEnhance)
+                           .setCommandName("tb");
         }
     }
 
