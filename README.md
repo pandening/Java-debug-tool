@@ -4,6 +4,10 @@
 
 Java-debug-tool is a dynamic debugging tool. it provides some debugging commands to debug your code in runtime.
 
+### development plan
+
+[new features / bug fix / code clean / etc.](roadmap.md)
+
 ### require
 
 * java 8 +
