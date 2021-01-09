@@ -11,7 +11,7 @@ Java-debug-tool is a dynamic debugging tool. it provides some debugging commands
 ### require
 
 * java 8 + , java 7 support is on the way ...
-* Linux / Mac
+* Unix like OS
 * libc
 
 
