@@ -21,7 +21,7 @@
         <jopt.version>4.6</jopt.version>
         <asm.version>6.0</asm.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <commom-io.version>2.4</commom-io.version>
+        <commom-io.version>2.7</commom-io.version>
         <jackson.core.version>2.9.3</jackson.core.version>
         <jackson.databind.version>2.9.10.1</jackson.databind.version>
         <spring.version>4.3.13.RELEASE</spring.version>
