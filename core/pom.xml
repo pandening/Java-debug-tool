@@ -24,7 +24,7 @@
         <commom-io.version>2.4</commom-io.version>
         <jackson.core.version>2.9.3</jackson.core.version>
         <jackson.databind.version>2.12.6.1</jackson.databind.version>
-        <spring.version>4.3.13.RELEASE</spring.version>
+        <spring.version>5.2.21.RELEASE</spring.version>
         <rxjava.veersion>0.20.7</rxjava.veersion>
         <rxnetty.version>0.4.7</rxnetty.version>
         <reactor-core.version>3.3.4.RELEASE</reactor-core.version>
