@@ -102,7 +102,23 @@ st => https://www.xiaohongshu.com/user/profile/65ad51fc000000000d01ca85
 
 dx => https://www.xiaohongshu.com/user/profile/65973bdf00000000220058a9
 
+sj => https://www.xiaohongshu.com/user/profile/60694fed0000000001007e67
 
+yj => https://www.xiaohongshu.com/user/profile/59b274c55e87e751835493d8
+
+sf => https://www.xiaohongshu.com/user/profile/5b4c08fc11be104514b6fd6d
+
+sb => https://www.xiaohongshu.com/user/profile/5a01441be8ac2b7b7c8512c2
+
+sh => https://www.xiaohongshu.com/user/profile/61231a54000000000100aeaa
+
+sh => https://www.xiaohongshu.com/user/profile/5d1d4adb00000000100371d3
+
+sw => https://www.xiaohongshu.com/user/profile/5be8dfd10c8b360001f49cf3
+
+sb => https://www.xiaohongshu.com/explore/6593f028000000001d03486c
+
+sh => https://www.xiaohongshu.com/explore/65dac87e000000000702529b
 
 
 
