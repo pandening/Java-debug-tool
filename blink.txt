@@ -182,6 +182,11 @@ lb => https://www.xiaohongshu.com/explore/65c34f260000000007029eeb
 
 sb => https://www.xiaohongshu.com/explore/65d5632f00000000070078ca
 
+sh => https://www.xiaohongshu.com/explore/65cc31ff00000000070059fb
+
+sb => https://www.xiaohongshu.com/explore/65d18207000000000102a88b
+
+
 
 
 
