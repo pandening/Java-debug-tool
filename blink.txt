@@ -239,6 +239,11 @@ fc => https://www.xiaohongshu.com/user/profile/5e588c110000000001009454
 dpg => https://www.xiaohongshu.com/explore/65ea996f000000000303290b
 
 
+======================== 2024-03-19 =============================
+sb => https://www.xiaohongshu.com/explore/65efd529000000000d00d0c4
+
+xsh => https://www.xiaohongshu.com/explore/65efbed20000000013026453
+
 
 
 
