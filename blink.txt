@@ -258,6 +258,10 @@ dsb => https://www.xiaohongshu.com/explore/65f25429000000001203cb11
 
 sb => https://www.xiaohongshu.com/explore/65edfc29000000001400485c
 
+sh => https://www.xiaohongshu.com/explore/65ef3bd40000000012022555
+
+st => https://www.xiaohongshu.com/explore/65f12863000000000d00fe3d
+
 
 
 
