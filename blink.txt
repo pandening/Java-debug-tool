@@ -252,6 +252,13 @@ sb => https://www.xiaohongshu.com/explore/65e54d9800000000040002dc
 
 mianshi kankan  zhge : https://xiaolincoding.com/
 
+sh => https://www.xiaohongshu.com/explore/65f391ca0000000014005737
+
+dsb => https://www.xiaohongshu.com/explore/65f25429000000001203cb11
+
+sb => https://www.xiaohongshu.com/explore/65edfc29000000001400485c
+
+
 
 
 
