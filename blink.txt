@@ -301,6 +301,27 @@ sb => https://www.xiaohongshu.com/explore/65e145b2000000000b00eafa
 sb => https://www.xiaohongshu.com/explore/65f10e5e0000000012030087
 
 
+======================== 2024-03-27 =============================
+sb => https://www.xiaohongshu.com/explore/65f7b970000000001400581d
+
+mx => https://www.xiaohongshu.com/explore/65e132480000000003037afa
+
+dsb => https://www.xiaohongshu.com/explore/65fa6371000000000d00e891
+
+sh => https://www.xiaohongshu.com/explore/65fbbdc0000000000d00c140
+
+sb => https://www.xiaohongshu.com/explore/65efc88f0000000012032362
+
+dsb => https://www.xiaohongshu.com/explore/65f7a15d0000000013026174
+
+nb => https://www.xiaohongshu.com/explore/65fba27b0000000012031bc5
+
+xsh => https://www.xiaohongshu.com/explore/65e927d1000000000102b8fc
+
+
+
+
+
 
 
 
