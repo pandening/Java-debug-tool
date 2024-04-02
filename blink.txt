@@ -462,6 +462,40 @@ dsb => https://www.xiaohongshu.com/explore/65fa653700000000120308c3
 
 dpg => https://www.xiaohongshu.com/explore/6600798400000000120216d8
 
+sh => https://www.xiaohongshu.com/explore/65ffad0d000000001203eafc
+
+haix => https://www.xiaohongshu.com/explore/65fa25060000000012031379
+
+mv => https://www.xiaohongshu.com/explore/65fe3dd600000000140069bf
+
+dd => https://www.xiaohongshu.com/explore/65f3d1ed00000000120222a0
+
+sb => https://www.xiaohongshu.com/explore/65fbb24e0000000013024fe2
+
+xiaoshuowang => https://www.jinyongwuxia.com/
+
+xiaoshuowang => https://www.jyjh.cn/jinyongbook/xinxiuban/newfeihuwaizhuan/index.htm
+
+春秋时期：《越女剑》（约公元前五世纪前叶）123
+北宋后期：《天龙八部》（公元1094年前后）134
+南宋中后期：《射雕英雄传》（公元1206年-1227年）
+南宋末：《神雕侠侣》（公元1239年-1260年）
+元朝末期：《倚天屠龙记》（公元1337年-1360年）
+明朝中期：《笑傲江湖》14
+明朝：《侠客行》
+明朝末期：《碧血剑》（公元1634年-1644年）
+清朝初期：《鹿鼎记》（公元1670年-1689年）
+清朝中期：《书剑恩仇录》（公元1756年前后）
+清朝中期：《飞狐外传》（公元1766年-1770年）
+清朝晚期：《雪山飞狐》（公元1780年3月15日）
+清朝：《鸳鸯刀》
+清朝：《连城诀》
+清朝：《白马啸西风》
+
+dsb => https://www.xiaohongshu.com/explore/66038fef000000001203102b
+
+dsh => https://www.xiaohongshu.com/explore/6600ed920000000014004e5b
+
 
 
 
