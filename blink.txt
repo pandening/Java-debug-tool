@@ -496,6 +496,19 @@ dsb => https://www.xiaohongshu.com/explore/66038fef000000001203102b
 
 dsh => https://www.xiaohongshu.com/explore/6600ed920000000014004e5b
 
+xsh => https://weibo.com/2079831943/O7q7NfmgI
+
+dsb => https://weibo.com/7689639877/O7EZIByTf
+
+dsb => https://weibo.com/1907443067/O513ysHuk
+
+sh => https://weibo.com/7751232195/O7wKpbna9
+
+sb => https://weibo.com/5579829891/O7KHAzQtE
+
+sh => https://weibo.com/6769571454/O5eTMxJYP
+
+
 
 
 
