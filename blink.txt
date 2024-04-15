@@ -550,6 +550,26 @@ sh => https://www.xiaohongshu.com/explore/660a772a000000001b0121db
 
 dsh => https://www.xiaohongshu.com/explore/6610cecb000000001a011bd9
 
+jp => https://weibo.com/5786706150/O9P3gCiaH
+
+sh => https://weibo.com/1793005655/O6PJvszTO
+
+dsh => https://weibo.com/1793005655/O9NaQ0HU8
+
+dfr => https://weibo.com/5579829891/O6n9tacQK
+
+jp => https://weibo.com/7804524175/O9q8Bl8As
+
+zhuanjian => https://weibo.com/7804524175/O9OyPw3KT
+
+dsb => https://weibo.com/7804524175/O9K4Vt76U
+
+dsh => https://weibo.com/7804524175/O9K46jKSk
+
+sb => https://weibo.com/7780654934/O9HbpsTQQ
+
+mv => https://weibo.com/5718310125/O9Qs72AcU
+
 
 
 
